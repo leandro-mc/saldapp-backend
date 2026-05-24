@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @ToString
 @AllArgsConstructor
 public class Group {
-    int id;
+    Long id;
     String name;
     String description;
     LocalDateTime startDate;
