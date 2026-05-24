@@ -1,0 +1,18 @@
+server:
+  port: ${APP_PORT:8080}
+
+spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}   # Default to 'dev' profile if not set
+
+  application:
+    name: saldapp
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
