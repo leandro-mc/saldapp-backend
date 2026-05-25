@@ -18,4 +18,8 @@ public class Group {
     LocalDateTime startDate;
     LocalDateTime endDate;
     LocalDateTime createdAt;
+
+    public void close(){
+        this.endDate = LocalDateTime.now();
+    }
 }
