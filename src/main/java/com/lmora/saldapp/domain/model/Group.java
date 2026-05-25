@@ -22,4 +22,8 @@ public class Group {
     public void close(){
         this.endDate = LocalDateTime.now();
     }
+
+    public boolean isClosed(){
+        return this.endDate != null;
+    }
 }
