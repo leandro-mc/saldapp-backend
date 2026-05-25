@@ -6,9 +6,6 @@ import jakarta.validation.constraints.Size;
 
 
 public record UpdateGroupRequest(
-        @NotNull(message = "Group ID is required")
-        Long id,
-
         @NotBlank(message = "Group name is required")
         @Size(min = 1, max = 200, message = "Group name must be between 1 and 200 characters")
         String name,

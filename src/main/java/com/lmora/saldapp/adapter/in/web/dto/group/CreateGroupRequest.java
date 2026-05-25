@@ -1,6 +1,5 @@
 package com.lmora.saldapp.adapter.in.web.dto.group;
 
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 

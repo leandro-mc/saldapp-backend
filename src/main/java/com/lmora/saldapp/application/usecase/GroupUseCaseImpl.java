@@ -19,9 +19,9 @@ public class GroupUseCaseImpl implements GroupUseCase {
     }
 
     @Override
-    public Group update(Group group) {
+    public Group update(Long id, Group group) {
         // Verify that the group exists before updating
-        Group existingGroup = groupRepository.findById(group.getId())
+        Group existingGroup = groupRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Group", group.getId()));
 
         // Verify that the group is not closed
