@@ -1,6 +1,5 @@
 package com.lmora.saldapp.adapter.out.persistence.adapter;
 
-import com.lmora.saldapp.adapter.out.persistence.entity.GroupEntity;
 import com.lmora.saldapp.adapter.out.persistence.mapper.GroupEntityMapper;
 import com.lmora.saldapp.adapter.out.persistence.repository.GroupJpaRepository;
 import com.lmora.saldapp.application.port.out.GroupRepositoryPort;

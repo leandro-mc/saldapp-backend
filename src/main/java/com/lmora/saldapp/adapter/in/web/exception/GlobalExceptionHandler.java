@@ -73,7 +73,7 @@ public class GlobalExceptionHandler {
     // 500 - unexpected errors
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(
-        Exception ex,
+//        Exception ex,
         HttpServletRequest request
     ) {
         ErrorResponse response = new ErrorResponse(
