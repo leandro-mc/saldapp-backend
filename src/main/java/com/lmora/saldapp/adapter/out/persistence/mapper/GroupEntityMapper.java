@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface GroupEntityMapper {
 
-    Group entityToDomain(GroupEntity groupEntity);
-    GroupEntity domainToEntity(Group group);
+    Group toDomain(GroupEntity groupEntity);
+    GroupEntity toEntity(Group group);
 
 }

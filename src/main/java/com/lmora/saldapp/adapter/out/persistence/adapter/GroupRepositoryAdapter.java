@@ -18,9 +18,9 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
 
     @Override
     public Group save(Group group) {
-        return groupMapper.entityToDomain(
+        return groupMapper.toDomain(
                 groupJpaRepository.save(
-                        groupMapper.domainToEntity(group)
+                        groupMapper.toEntity(group)
                 )
         );
     }
@@ -28,7 +28,7 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
     @Override
     public Optional<Group> findById(Long id) {
         return groupJpaRepository.findById(id)
-                .map(groupMapper::entityToDomain);
+                .map(groupMapper::toDomain);
 
     }
 }
