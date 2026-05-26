@@ -6,6 +6,8 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface IntegrantEntityMapper {
+
     IntegrantEntity toEntity(Integrant integrant);
     Integrant toDomain(IntegrantEntity integrantEntity);
+
 }

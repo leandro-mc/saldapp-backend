@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface IntegrantRepositoryPort {
     Integrant save(Integrant integrant);
     List<Integrant> findByGroupId(Long groupId);
-    void deleteByGroupId(Long groupId);
+    void deleteById(Long id);
 }
