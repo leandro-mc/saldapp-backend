@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
@@ -33,6 +34,12 @@ public class IntegrantRepositoryAdapter implements IntegrantRepositoryPort {
         return integrantEntities.stream()
                 .map(integrantMapper::toDomain)
                 .toList();
+    }
+
+    @Override
+    public Optional<Integrant> findById(Long id) {
+        return integrantJpaRepository.findById(id)
+                .map(integrantMapper::toDomain);
     }
 
     @Override
