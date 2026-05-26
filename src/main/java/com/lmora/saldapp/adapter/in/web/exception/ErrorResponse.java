@@ -1,7 +1,5 @@
 package com.lmora.saldapp.adapter.in.web.exception;
 
-import org.springframework.validation.FieldError;
-
 import java.time.LocalDateTime;
 import java.util.Map;
 
