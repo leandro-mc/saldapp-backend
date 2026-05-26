@@ -27,7 +27,7 @@ public class IntegrantRepositoryAdapter implements IntegrantRepositoryPort {
     }
 
     @Override
-    public List<Integrant> findByGroupId(Long groupId) {
+    public List<Integrant> findAllByGroup(Long groupId) {
         List<IntegrantEntity> integrantEntities = integrantJpaRepository.findByGroupId(groupId);
 
         return integrantEntities.stream()
