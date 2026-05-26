@@ -1,5 +1,6 @@
 package com.lmora.saldapp.adapter.out.persistence.adapter;
 
+import com.lmora.saldapp.adapter.out.persistence.entity.GroupEntity;
 import com.lmora.saldapp.adapter.out.persistence.entity.IntegrantEntity;
 import com.lmora.saldapp.adapter.out.persistence.mapper.IntegrantEntityMapper;
 import com.lmora.saldapp.adapter.out.persistence.repository.IntegrantJpaRepository;
@@ -20,10 +21,15 @@ public class IntegrantRepositoryAdapter implements IntegrantRepositoryPort {
 
     @Override
     public Integrant save(Integrant integrant) {
+        IntegrantEntity integrantEntity = integrantMapper.toEntity(integrant);
+
+        // Resolve FK with Group
+        GroupEntity group = new GroupEntity();
+        group.setId(integrant.getGroupId());
+        integrantEntity.setGroup(group);
+
         return integrantMapper.toDomain(
-                integrantJpaRepository.save(
-                        integrantMapper.toEntity(integrant)
-                )
+                integrantJpaRepository.save(integrantEntity)
         );
     }
 

@@ -29,7 +29,4 @@ public class IntegrantEntity {
     @JoinColumn(name = "group_id", nullable = false)
     GroupEntity group;
 
-    public Long getGroupId() {
-        return group != null ? group.getId() : null;
-    }
 }
