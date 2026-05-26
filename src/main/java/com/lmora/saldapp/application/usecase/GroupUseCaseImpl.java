@@ -22,7 +22,7 @@ public class GroupUseCaseImpl implements GroupUseCase {
     public Group update(Long id, Group group) {
         // Verify that the group exists before updating
         Group existingGroup = groupRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Group", group.getId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Group", id));
 
         // Verify that the group is not closed
         if (existingGroup.isClosed()) throw new GroupClosedException(group.getId());
