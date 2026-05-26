@@ -5,5 +5,4 @@ public record IntegrantResponse(
         Long groupId,
         String name
 ) {
-
 }
