@@ -1,5 +1,6 @@
 package com.lmora.saldapp.domain.model;
 
+import com.lmora.saldapp.domain.exception.GroupClosedException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,5 +26,9 @@ public class Group {
 
     public boolean isClosed(){
         return this.endDate != null;
+    }
+
+    public void validateIsOpen(){
+        if (this.isClosed()) throw new GroupClosedException(id);
     }
 }

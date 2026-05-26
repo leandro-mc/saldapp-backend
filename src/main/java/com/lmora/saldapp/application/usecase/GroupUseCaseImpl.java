@@ -25,7 +25,7 @@ public class GroupUseCaseImpl implements GroupUseCase {
                 .orElseThrow(() -> new ResourceNotFoundException("Group", id));
 
         // Verify that the group is not closed
-        if (existingGroup.isClosed()) throw new GroupClosedException(group.getId());
+        existingGroup.validateIsOpen();
 
         // Only update the name and description, as other fields like 'closed' should not be updated here
         existingGroup.setName(group.getName());
@@ -39,7 +39,7 @@ public class GroupUseCaseImpl implements GroupUseCase {
         Group existingGroup = groupRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Group", id));
 
-        if (existingGroup.isClosed()) throw new GroupClosedException(id);
+        existingGroup.validateIsOpen();
 
         existingGroup.close();
         return groupRepository.save(existingGroup);
