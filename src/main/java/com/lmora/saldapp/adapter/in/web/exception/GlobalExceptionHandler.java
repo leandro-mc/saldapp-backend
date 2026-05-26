@@ -1,9 +1,6 @@
 package com.lmora.saldapp.adapter.in.web.exception;
 
-import com.lmora.saldapp.domain.exception.GroupClosedException;
-import com.lmora.saldapp.domain.exception.IntegrantHasExpensesException;
-import com.lmora.saldapp.domain.exception.ResourceNotFoundException;
-import com.lmora.saldapp.domain.exception.SaldAppException;
+import com.lmora.saldapp.domain.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -39,7 +36,8 @@ public class GlobalExceptionHandler {
     // 409 - Conflict
     @ExceptionHandler({
             GroupClosedException.class,
-            IntegrantHasExpensesException.class
+            IntegrantHasExpensesException.class,
+            IntegrantDontBelongToGroupException.class
     })
     public ResponseEntity<ErrorResponse>  handleConflictException(
         SaldAppException ex,
