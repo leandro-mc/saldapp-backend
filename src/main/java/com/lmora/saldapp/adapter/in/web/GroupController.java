@@ -22,23 +22,23 @@ public class GroupController {
 
     @PostMapping
     ResponseEntity<GroupResponse> createGroup(@Valid @RequestBody CreateGroupRequest request) {
-        GroupResponse response = mapper.domainToDto(
-                useCase.create(mapper.dtoToDomain(request))
+        GroupResponse response = mapper.toDto(
+                useCase.create(mapper.toDomain(request))
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PatchMapping("/{id}")
     ResponseEntity<GroupResponse> updateGroup(@PathVariable Long id, @Valid @RequestBody UpdateGroupRequest request) {
-        GroupResponse response = mapper.domainToDto(
-                useCase.update(id, mapper.dtoToDomain(request))
+        GroupResponse response = mapper.toDto(
+                useCase.update(id, mapper.toDomain(request))
         );
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
     ResponseEntity<GroupResponse> findById(@PathVariable Long id) {
-        GroupResponse response = mapper.domainToDto(
+        GroupResponse response = mapper.toDto(
                 useCase.findById(id)
         );
         return ResponseEntity.ok(response);
@@ -46,7 +46,7 @@ public class GroupController {
 
     @PostMapping("/{id}/close")
     ResponseEntity<GroupResponse> close(@PathVariable Long id) {
-        GroupResponse response = mapper.domainToDto(
+        GroupResponse response = mapper.toDto(
                 useCase.close(id)
         );
         return ResponseEntity.ok(response);
