@@ -8,8 +8,8 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface GroupWebMapper {
-    Group dtoToDomain(UpdateGroupRequest request);
-    Group dtoToDomain(CreateGroupRequest request);
+    Group toDomain(UpdateGroupRequest request);
+    Group toDomain(CreateGroupRequest request);
 
-    GroupResponse domainToDto(Group group);
+    GroupResponse toDto(Group group);
 }
