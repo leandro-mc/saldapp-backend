@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -28,7 +30,7 @@ public class GlobalExceptionHandler {
             "Resource Not Found",
             ex.getMessage(),
             request.getRequestURI(),
-            List.of()
+            Map.of()
         );
         return ResponseEntity.status(ex.getHttpStatusCode()).body(response);
     }
@@ -46,7 +48,7 @@ public class GlobalExceptionHandler {
             "Conflict",
             ex.getMessage(),
             request.getRequestURI(),
-            List.of()
+            Map.of()
         );
         return ResponseEntity.status(ex.getHttpStatusCode()).body(response);
     }
@@ -57,13 +59,20 @@ public class GlobalExceptionHandler {
         MethodArgumentNotValidException ex,
         HttpServletRequest request
     ){
-        List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
+        Map<String, String> fieldErrors = ex.getFieldErrors()
+                .stream()
+                .collect(Collectors.toMap(
+                        FieldError::getField,
+                        error -> error.getDefaultMessage() != null
+                                ? error.getDefaultMessage()
+                                : "Invalid value"
+                ));
 
         ErrorResponse response = new ErrorResponse(
                 LocalDateTime.now(),
                 ex.getStatusCode().value(),
                 "Bad Request",
-                ex.getMessage(),
+                "Validation failed for one or more fields.",
                 request.getRequestURI(),
                 fieldErrors
         );
@@ -82,7 +91,7 @@ public class GlobalExceptionHandler {
                 "Internal Server Error",
                 "An unexpected error occurred. Please try again later.",
                 request.getRequestURI(),
-                List.of()
+                Map.of()
         );
         return ResponseEntity.status(500).body(response);
     }

@@ -3,7 +3,7 @@ package com.lmora.saldapp.adapter.in.web.exception;
 import org.springframework.validation.FieldError;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Map;
 
 public record ErrorResponse(
         LocalDateTime timestamp,
@@ -11,6 +11,6 @@ public record ErrorResponse(
         String error,
         String message,
         String path,
-        List<FieldError> errors // Only 400 error (bad request)
+        Map<String, String> errors // Only 400 error (bad request)
 ) {
 }

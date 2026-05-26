@@ -1,6 +1,7 @@
 package com.lmora.saldapp.adapter.in.web.dto.group;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ public record CreateGroupRequest(
         @Size(max = 500, message = "Group description must be at most 500 characters")
         String description,
 
+        @NotNull(message = "Start date is required")
         LocalDateTime startDate
 ) {
 }
