@@ -2,7 +2,6 @@ package com.lmora.saldapp.application.usecase;
 
 import com.lmora.saldapp.application.port.in.GroupUseCase;
 import com.lmora.saldapp.application.port.out.GroupRepositoryPort;
-import com.lmora.saldapp.domain.exception.GroupClosedException;
 import com.lmora.saldapp.domain.exception.ResourceNotFoundException;
 import com.lmora.saldapp.domain.model.Group;
 import lombok.RequiredArgsConstructor;
