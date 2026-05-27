@@ -9,17 +9,20 @@ import com.lmora.saldapp.domain.model.Group;
 import com.lmora.saldapp.domain.model.Integrant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
 
-@RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Service
+@RequiredArgsConstructor
 public class IntegrantUseCaseImpl implements IntegrantUseCase {
 
     private final IntegrantRepositoryPort integrantRepository;
     private final GroupRepositoryPort groupRepository;
 
+    @Transactional
     @Override
     public Integrant createAndAssign(Long groupId, Integrant integrant) {
         Group existingGroup = groupRepository.findById(groupId)
@@ -31,6 +34,7 @@ public class IntegrantUseCaseImpl implements IntegrantUseCase {
         return integrantRepository.save(integrant);
     }
 
+    @Transactional
     @Override
     public Integrant update(Long groupId, Long integrantId, Integrant integrant) {
         Group existingGroup = groupRepository.findById(groupId)
@@ -47,6 +51,7 @@ public class IntegrantUseCaseImpl implements IntegrantUseCase {
         return integrantRepository.save(existingIntegrant);
     }
 
+    @Transactional
     @Override
     public void delete(Long groupId, Long integrantId) {
         Group existingGroup = groupRepository.findById(groupId)
