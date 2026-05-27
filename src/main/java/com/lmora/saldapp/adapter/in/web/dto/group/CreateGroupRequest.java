@@ -1,5 +1,6 @@
 package com.lmora.saldapp.adapter.in.web.dto.group;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -15,6 +16,7 @@ public record CreateGroupRequest(
         String description,
 
         @NotNull(message = "Start date is required")
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")      // ISO 8601 format
         LocalDateTime startDate
 ) {
 }
