@@ -37,7 +37,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             GroupClosedException.class,
             IntegrantHasExpensesException.class,
-            IntegrantDontBelongToGroupException.class
+            IntegrantDontBelongToGroupException.class,
+            ExpenseDontBelongToGroupException.class,
     })
     public ResponseEntity<ErrorResponse>  handleConflictException(
         SaldAppException ex,
