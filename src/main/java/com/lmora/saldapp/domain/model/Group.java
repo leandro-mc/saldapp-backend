@@ -13,12 +13,12 @@ import java.time.LocalDateTime;
 @ToString
 @AllArgsConstructor
 public class Group {
-    Long id;
-    String name;
-    String description;
-    LocalDateTime startDate;
-    LocalDateTime endDate;
-    LocalDateTime createdAt;
+    private Long id;
+    private String name;
+    private String description;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    private LocalDateTime createdAt;
 
     public void close(){
         this.endDate = LocalDateTime.now();
