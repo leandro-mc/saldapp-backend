@@ -7,7 +7,6 @@ import com.lmora.saldapp.adapter.out.persistence.mapper.ExpenseEntityMapper;
 import com.lmora.saldapp.adapter.out.persistence.repository.ExpenseJpaRepository;
 import com.lmora.saldapp.application.port.out.ExpenseRepositoryPort;
 import com.lmora.saldapp.domain.model.Expense;
-import jakarta.persistence.Entity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
