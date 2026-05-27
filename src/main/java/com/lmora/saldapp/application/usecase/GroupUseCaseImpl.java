@@ -6,17 +6,21 @@ import com.lmora.saldapp.domain.exception.ResourceNotFoundException;
 import com.lmora.saldapp.domain.model.Group;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class GroupUseCaseImpl implements GroupUseCase {
     private final GroupRepositoryPort groupRepository;
 
+    @Transactional
     @Override
     public Group create(Group group) {
         return groupRepository.save(group);
     }
 
+    @Transactional
     @Override
     public Group update(Long id, Group group) {
         // Verify that the group exists before updating
@@ -33,6 +37,7 @@ public class GroupUseCaseImpl implements GroupUseCase {
         return groupRepository.save(existingGroup);
     }
 
+    @Transactional
     @Override
     public Group close(Long id) {
         Group existingGroup = groupRepository.findById(id)
@@ -43,6 +48,7 @@ public class GroupUseCaseImpl implements GroupUseCase {
         existingGroup.close();
         return groupRepository.save(existingGroup);
     }
+
 
     @Override
     public Group findById(Long id) {
