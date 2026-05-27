@@ -7,6 +7,7 @@ import com.lmora.saldapp.adapter.in.web.mapper.IntegrantWebMapper;
 import com.lmora.saldapp.application.port.in.IntegrantUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class IntegrantController {
         IntegrantResponse response = mapper.toDto(
                 useCase.createAndAssign(groupId, mapper.toDomain(request))
         );
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PatchMapping("/{id}")
