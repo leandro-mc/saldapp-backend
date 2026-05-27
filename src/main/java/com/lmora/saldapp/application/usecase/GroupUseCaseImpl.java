@@ -24,11 +24,7 @@ public class GroupUseCaseImpl implements GroupUseCase {
     @Override
     public Group update(Long id, Group group) {
         // Verify that the group exists before updating
-        Group existingGroup = groupRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Group", id));
-
-        // Verify that the group is not closed
-        existingGroup.validateIsOpen();
+        Group existingGroup = findOpenGroup(id);
 
         // Only update the name and description, as other fields like 'closed' should not be updated here
         existingGroup.setName(group.getName());
@@ -40,19 +36,23 @@ public class GroupUseCaseImpl implements GroupUseCase {
     @Transactional
     @Override
     public Group close(Long id) {
-        Group existingGroup = groupRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Group", id));
-
-        existingGroup.validateIsOpen();
-
+        Group existingGroup = findOpenGroup(id);
         existingGroup.close();
         return groupRepository.save(existingGroup);
     }
-
 
     @Override
     public Group findById(Long id) {
         return groupRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Group", id));
+    }
+
+    private Group findOpenGroup(Long groupId) {
+        // Verify that the group exists
+        Group existingGroup = groupRepository.findById(groupId)
+                .orElseThrow(() -> new ResourceNotFoundException("Group", groupId));
+        // Verify that the group is not closed
+        existingGroup.validateIsOpen();
+        return existingGroup;
     }
 }
