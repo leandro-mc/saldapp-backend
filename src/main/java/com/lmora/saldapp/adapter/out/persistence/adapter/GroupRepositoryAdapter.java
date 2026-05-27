@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @Repository
+@RequiredArgsConstructor
 public class GroupRepositoryAdapter implements GroupRepositoryPort {
 
     private final GroupJpaRepository groupJpaRepository;
