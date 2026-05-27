@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface IntegrantEntityMapper {
 
-    @Mapping(target = "group", ignore = true)
+    @Mapping(target = "group", ignore = true)           // Add into Repository Adapter
     IntegrantEntity toEntity(Integrant integrant);
 
     @Mapping(target = "groupId", source = "group.id")
