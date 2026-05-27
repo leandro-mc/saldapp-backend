@@ -9,8 +9,8 @@ import java.math.BigDecimal;
 
 public record UpdateExpenseRequest(
         @NotNull(message = "Payed by is required")
-        Long payedBy
-        ,
+        Long payedBy,
+
         @NotBlank(message = "Description is required")
         @Size(min = 10, max = 500, message = "Description must be between 10 and 500 characters")
         String description,
