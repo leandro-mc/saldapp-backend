@@ -1,6 +1,5 @@
 package com.lmora.saldapp.adapter.in.web;
 
-import com.lmora.saldapp.adapter.in.web.dto.group.CreateGroupRequest;
 import com.lmora.saldapp.adapter.in.web.dto.integrant.IntegrantRequest;
 import com.lmora.saldapp.adapter.in.web.dto.integrant.IntegrantResponse;
 import com.lmora.saldapp.adapter.in.web.mapper.IntegrantWebMapper;

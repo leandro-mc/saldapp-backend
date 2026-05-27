@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 @ToString
 @AllArgsConstructor
 public class Integrant {
-    Long id;
-    String name;
-    LocalDateTime createdAt;
+    private Long id;
+    private String name;
+    private LocalDateTime createdAt;
 
-    Long groupId;
+    private Long groupId;
 }
