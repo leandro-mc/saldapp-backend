@@ -10,4 +10,5 @@ public interface ExpenseRepositoryPort {
     void deleteById(Long id);
     Optional<Expense> findById(Long id);
     List<Expense> findAllByIntegrant(Long integrantId);
+    List<Expense> findAllByGroup(Long groupId);
 }

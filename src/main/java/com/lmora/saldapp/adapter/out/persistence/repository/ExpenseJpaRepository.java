@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ExpenseJpaRepository extends JpaRepository<ExpenseEntity, Long> {
     List<ExpenseEntity> findByPayedById(Long payedById);
+    List<ExpenseEntity> findByGroupId(Long groupId);
 }

@@ -59,4 +59,13 @@ public class ExpenseRepositoryAdapter implements ExpenseRepositoryPort {
                 .map(expenseMapper::toDomain)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Expense> findAllByGroup(Long groupId) {
+        List<ExpenseEntity> expenseEntities = expenseJpaRepository.findByGroupId(groupId);
+
+        return expenseEntities.stream()
+                .map(expenseMapper::toDomain)
+                .collect(Collectors.toList());
+    }
 }
