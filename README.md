@@ -41,7 +41,9 @@ docker compose up -d
 ```
 
 **4. Correr la aplicación**
-
+```bash
+mvn spring-boot:run
+```
 
 La API queda disponible en `http://localhost:8080`.
 
