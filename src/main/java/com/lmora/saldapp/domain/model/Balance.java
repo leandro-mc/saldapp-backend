@@ -10,5 +10,5 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class Balance {
     private Long integrantId;
-    private BigDecimal balance; // positivo = le deben, negativo = debe
+    private BigDecimal balance; // positive: the integrant should receive money, negative: the integrant should pay money
 }
