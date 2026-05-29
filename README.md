@@ -1,4 +1,4 @@
-# SaldApp
+# SaldApp — Backend
 
 División inteligente de gastos grupales.
 
@@ -100,3 +100,12 @@ DB_USERNAME=
 DB_PASSWORD=
 APP_PORT=8080
 ```
+
+## Autor
+
+**Leandro Mora Corrales**
+[linkedin.com/in/leandromora](https://linkedin.com/in/leandromora)
+
+## Licencia
+
+MIT License — see [LICENSE](LICENSE) for details.
