@@ -68,7 +68,8 @@ public class GlobalExceptionHandler {
                         FieldError::getField,
                         error -> error.getDefaultMessage() != null
                                 ? error.getDefaultMessage()
-                                : "Invalid value"
+                                : "Invalid value",
+                        (first, second) -> first + ", " + second
                 ));
 
         ErrorResponse response = new ErrorResponse(
