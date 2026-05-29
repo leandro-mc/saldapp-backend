@@ -63,6 +63,9 @@ public class IntegrantUseCaseImpl implements IntegrantUseCase {
 
     @Override
     public List<Integrant> findAllByGroup(Long groupId) {
+        groupRepository.findById(groupId)
+                .orElseThrow(() -> new ResourceNotFoundException("Group", groupId));
+
         return integrantRepository.findAllByGroup(groupId);
     }
 
