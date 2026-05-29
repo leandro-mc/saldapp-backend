@@ -65,7 +65,9 @@ public class ExpenseUseCaseImpl implements ExpenseUseCase {
 
     @Override
     public List<Expense> findAllByIntegrant(Long groupId, Long integrantId) {
-        Group existingGroup = findOpenGroup(groupId);
+        Group existingGroup = groupRepository.findById(groupId)
+                .orElseThrow(() -> new ResourceNotFoundException("Group", groupId));
+
         findAndValidateIntegrant(existingGroup.getId(), integrantId);
         return expenseRepository.findAllByIntegrant(integrantId);
     }
