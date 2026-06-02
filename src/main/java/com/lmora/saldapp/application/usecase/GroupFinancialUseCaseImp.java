@@ -66,6 +66,10 @@ public class GroupFinancialUseCaseImp implements GroupFinancialUseCase {
                 .map(Integrant::getId)
                 .toList();
 
+        if (integrantsIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         List<Expense> groupExpenses = expenseRepository.findAllByGroup(groupId);
 
         BigDecimal totalExpenses = groupExpenses.stream()
