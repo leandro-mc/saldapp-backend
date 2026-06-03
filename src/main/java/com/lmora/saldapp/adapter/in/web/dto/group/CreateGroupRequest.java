@@ -15,6 +15,10 @@ public record CreateGroupRequest(
         @Size(max = 500, message = "Group description must be at most 500 characters")
         String description,
 
+        @NotBlank(message = "Currency is required")
+        @Size(max = 5, message = "Currency code must be at most 5 characters")
+        String currency,
+
         @NotNull(message = "Start date is required")
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")      // ISO 8601 format
         LocalDateTime startDate

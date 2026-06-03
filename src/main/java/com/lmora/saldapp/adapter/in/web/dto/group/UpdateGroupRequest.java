@@ -10,6 +10,10 @@ public record UpdateGroupRequest(
         String name,
 
         @Size(max = 500, message = "Group description must be at most 500 characters")
-        String description
+        String description,
+
+        @NotBlank(message = "Currency is required")
+        @Size(max = 5, message = "Currency code must be at most 5 characters")
+        String currency
 ) {
 }
