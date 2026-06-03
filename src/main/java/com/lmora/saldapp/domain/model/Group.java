@@ -16,6 +16,7 @@ public class Group {
     private Long id;
     private String name;
     private String description;
+    private String currency;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private LocalDateTime createdAt;
