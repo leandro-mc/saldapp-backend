@@ -1,28 +1,36 @@
-package com.lmora.saldapp.application.usecase;
+package com.lmora.saldapp.application.usecase.group;
 
 import com.lmora.saldapp.application.port.in.GroupUseCase;
+import com.lmora.saldapp.application.port.out.ExpenseRepositoryPort;
 import com.lmora.saldapp.application.port.out.GroupRepositoryPort;
+import com.lmora.saldapp.application.port.out.IntegrantRepositoryPort;
+import com.lmora.saldapp.application.usecase.group.model.GroupDetailsResult;
 import com.lmora.saldapp.domain.exception.ResourceNotFoundException;
 import com.lmora.saldapp.domain.model.Group;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class GroupUseCaseImpl implements GroupUseCase {
+
     private final GroupRepositoryPort groupRepository;
+    private final IntegrantRepositoryPort integrantRepository;
+    private final ExpenseRepositoryPort expenseRepository;
 
     @Transactional
     @Override
-    public Group create(Group group) {
-        return groupRepository.save(group);
+    public GroupDetailsResult create(Group group) {
+        return enrichWithDetails(groupRepository.save(group));
     }
 
     @Transactional
     @Override
-    public Group update(Long id, Group group) {
+    public GroupDetailsResult update(Long id, Group group) {
         // Verify that the group exists before updating
         Group existingGroup = findOpenGroup(id);
 
@@ -30,21 +38,24 @@ public class GroupUseCaseImpl implements GroupUseCase {
         existingGroup.setName(group.getName());
         existingGroup.setDescription(group.getDescription());
 
-        return groupRepository.save(existingGroup);
+        return enrichWithDetails(groupRepository.save(existingGroup));
     }
 
     @Transactional
     @Override
-    public Group close(Long id) {
+    public GroupDetailsResult close(Long id) {
         Group existingGroup = findOpenGroup(id);
         existingGroup.close();
-        return groupRepository.save(existingGroup);
+        return enrichWithDetails(groupRepository.save(existingGroup));
     }
 
     @Override
-    public Group findById(Long id) {
-        return groupRepository.findById(id)
+    public GroupDetailsResult findById(Long id) {
+        Group group = groupRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Group", id));
+
+
+        return enrichWithDetails(group);
     }
 
     private Group findOpenGroup(Long groupId) {
@@ -54,5 +65,14 @@ public class GroupUseCaseImpl implements GroupUseCase {
         // Verify that the group is not closed
         existingGroup.validateIsOpen();
         return existingGroup;
+    }
+
+    private GroupDetailsResult enrichWithDetails(Group group) {
+        int integrantCount = integrantRepository.findAllByGroup(group.getId()).size();
+        BigDecimal totalExpenses = expenseRepository.findAllByGroup(group.getId())
+                .stream()
+                .map(com.lmora.saldapp.domain.model.Expense::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return new GroupDetailsResult(group, integrantCount, totalExpenses);
     }
 }
