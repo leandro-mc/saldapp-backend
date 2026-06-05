@@ -1,9 +1,10 @@
-package com.lmora.saldapp.application.usecase;
+package com.lmora.saldapp.application.usecase.financial;
 
 import com.lmora.saldapp.application.port.in.GroupFinancialUseCase;
 import com.lmora.saldapp.application.port.out.ExpenseRepositoryPort;
 import com.lmora.saldapp.application.port.out.GroupRepositoryPort;
 import com.lmora.saldapp.application.port.out.IntegrantRepositoryPort;
+import com.lmora.saldapp.application.usecase.financial.model.BalanceDetailsResult;
 import com.lmora.saldapp.domain.exception.IntegrantDontBelongToGroupException;
 import com.lmora.saldapp.domain.exception.ResourceNotFoundException;
 import com.lmora.saldapp.domain.model.*;
@@ -27,16 +28,28 @@ public class GroupFinancialUseCaseImp implements GroupFinancialUseCase {
     private final IntegrantRepositoryPort integrantRepository;
 
     @Override
-    public List<Balance> getGroupBalances(Long groupId) {
+    public List<BalanceDetailsResult> getGroupBalances(Long groupId) {
         // Verify that the group exists
         Group existingGroup = groupRepository.findById(groupId)
                 .orElseThrow(() -> new ResourceNotFoundException("Group", groupId));
 
-        return calculateGroupBalances(existingGroup.getId());
+        List<Balance> balances = calculateGroupBalances(existingGroup.getId());
+
+        List<Integrant> integrants = integrantRepository.findAllByGroup(existingGroup.getId());
+
+        List<BalanceDetailsResult> balanceDetailsResults = new ArrayList<>();
+        for (Balance balance : balances) {
+            Integrant integrant = integrants.stream()
+                    .filter(i -> Objects.equals(i.getId(), balance.getIntegrantId()))
+                    .findFirst()
+                    .orElseThrow(() -> new ResourceNotFoundException("Integrant", balance.getIntegrantId()));
+            balanceDetailsResults.add(new BalanceDetailsResult(balance, integrant.getName()));
+        }
+        return balanceDetailsResults;
     }
 
     @Override
-    public Balance getIntegrantBalance(Long groupId, Long integrantId) {
+    public BalanceDetailsResult getIntegrantBalance(Long groupId, Long integrantId) {
         // Verify that the group exists
         Group existingGroup = groupRepository.findById(groupId)
                 .orElseThrow(() -> new ResourceNotFoundException("Group", groupId));
@@ -44,10 +57,12 @@ public class GroupFinancialUseCaseImp implements GroupFinancialUseCase {
         // Verify that the integrant exists and belongs to the group
         Integrant existingIntegrant = findAndValidateIntegrant(existingGroup.getId(), integrantId);
 
-        return calculateGroupBalances(groupId).stream()
+        Balance integrantBalance = calculateGroupBalances(groupId).stream()
                 .filter(balance -> Objects.equals(balance.getIntegrantId(), existingIntegrant.getId()))
                 .findFirst()
-                .orElse(new Balance(existingIntegrant.getId(), BigDecimal.ZERO));
+                .orElse(new Balance(existingIntegrant.getId(),BigDecimal.ZERO, BigDecimal.ZERO));
+
+        return new BalanceDetailsResult(integrantBalance, existingIntegrant.getName());
     }
 
     @Override
@@ -79,19 +94,25 @@ public class GroupFinancialUseCaseImp implements GroupFinancialUseCase {
         BigDecimal equalShare = totalExpenses
                 .divide(BigDecimal.valueOf(integrantsIds.size()), 2, RoundingMode.HALF_UP);
 
-        // Everyone starts debt,then we add the expenses they paid
+        // Everyone starts debt,then we add the expenses they paid and sum total paid by each integrant to calculate the balance
         Map<Long, BigDecimal> groupBalances = new HashMap<>();
+        Map<Long, BigDecimal> totalPaidByIntegrant = new HashMap<>();
         for (Long id : integrantsIds) {
             groupBalances.put(id, equalShare.negate());
+            totalPaidByIntegrant.put(id, BigDecimal.ZERO);
         }
 
         // Add the expenses paid by each integrant to their balance
         for (Expense expense : groupExpenses) {
             groupBalances.merge(expense.getPayedBy(), expense.getAmount(), BigDecimal::add);
+            totalPaidByIntegrant.merge(expense.getPayedBy(), expense.getAmount(), BigDecimal::add);
         }
 
         return groupBalances.entrySet().stream()
-                .map(entry -> new Balance(entry.getKey(), entry.getValue()))
+                .map(entry -> new Balance(
+                        entry.getKey(),
+                        totalPaidByIntegrant.get(entry.getKey()),
+                        entry.getValue()))
                 .collect(Collectors.toList());
     }
 
