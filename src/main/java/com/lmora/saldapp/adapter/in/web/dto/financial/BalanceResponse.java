@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 public record BalanceResponse(
         Long integrantId,
+        String integrantName,
+        BigDecimal totalPaid,
         BigDecimal balance  // positive: the integrant should receive money, negative: the integrant should pay money
 ) {
 }
