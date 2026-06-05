@@ -69,11 +69,9 @@ public class GroupUseCaseImpl implements GroupUseCase {
     }
 
     private GroupDetailsResult enrichWithDetails(Group group) {
-        int integrantCount = integrantRepository.findAllByGroup(group.getId()).size();
-        BigDecimal totalExpenses = expenseRepository.findAllByGroup(group.getId())
-                .stream()
-                .map(com.lmora.saldapp.domain.model.Expense::getAmount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        int integrantCount = integrantRepository.countByGroupId(group.getId());
+        BigDecimal totalExpenses = expenseRepository.sumAmountByGroupId(group.getId());
+
         return new GroupDetailsResult(group, integrantCount, totalExpenses);
     }
 }

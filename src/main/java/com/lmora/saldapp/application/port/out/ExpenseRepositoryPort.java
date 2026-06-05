@@ -2,6 +2,7 @@ package com.lmora.saldapp.application.port.out;
 
 import com.lmora.saldapp.domain.model.Expense;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,4 +12,7 @@ public interface ExpenseRepositoryPort {
     Optional<Expense> findById(Long id);
     List<Expense> findAllByIntegrant(Long integrantId);
     List<Expense> findAllByGroup(Long groupId);
+
+    BigDecimal sumAmountByGroupId(Long groupId);
+
 }

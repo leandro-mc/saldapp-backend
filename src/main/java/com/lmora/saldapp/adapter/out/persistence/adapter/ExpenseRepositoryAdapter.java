@@ -10,6 +10,7 @@ import com.lmora.saldapp.domain.model.Expense;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -67,5 +68,10 @@ public class ExpenseRepositoryAdapter implements ExpenseRepositoryPort {
         return expenseEntities.stream()
                 .map(expenseMapper::toDomain)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public BigDecimal sumAmountByGroupId(Long groupId) {
+        return expenseJpaRepository.sumExpenseAmountByGroupId(groupId);
     }
 }
