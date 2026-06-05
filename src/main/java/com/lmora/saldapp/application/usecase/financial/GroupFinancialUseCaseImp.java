@@ -57,10 +57,7 @@ public class GroupFinancialUseCaseImp implements GroupFinancialUseCase {
         // Verify that the integrant exists and belongs to the group
         Integrant existingIntegrant = findAndValidateIntegrant(existingGroup.getId(), integrantId);
 
-        Balance integrantBalance = calculateGroupBalances(groupId).stream()
-                .filter(balance -> Objects.equals(balance.getIntegrantId(), existingIntegrant.getId()))
-                .findFirst()
-                .orElse(new Balance(existingIntegrant.getId(),BigDecimal.ZERO, BigDecimal.ZERO));
+        Balance integrantBalance = calculateIntegrantBalance(existingGroup.getId(), existingIntegrant.getId());
 
         return new BalanceDetailsResult(integrantBalance, existingIntegrant.getName());
     }
@@ -114,6 +111,25 @@ public class GroupFinancialUseCaseImp implements GroupFinancialUseCase {
                         totalPaidByIntegrant.get(entry.getKey()),
                         entry.getValue()))
                 .collect(Collectors.toList());
+    }
+
+    private Balance calculateIntegrantBalance(Long groupId, Long integrantId) {
+
+        BigDecimal totalIntegrantExpenses = expenseRepository.findAllByIntegrant(integrantId).stream()
+                .map(Expense::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal totalGroupExpenses = expenseRepository.sumAmountByGroupId(groupId);
+        int integrantCount = integrantRepository.countByGroupId(groupId);
+
+        BigDecimal equalShare = totalGroupExpenses
+                .divide(BigDecimal.valueOf(integrantCount), 2, RoundingMode.HALF_UP);
+
+        return new Balance(
+                integrantId,
+                totalIntegrantExpenses,
+                equalShare.negate().add(totalIntegrantExpenses)
+        );
     }
 
     private Integrant findAndValidateIntegrant(Long groupId, Long integrantId) {
