@@ -37,6 +37,7 @@ public class GroupUseCaseImpl implements GroupUseCase {
         // Only update the name and description, as other fields like 'closed' should not be updated here
         existingGroup.setName(group.getName());
         existingGroup.setDescription(group.getDescription());
+        existingGroup.setCurrency(group.getCurrency());
 
         return enrichWithDetails(groupRepository.save(existingGroup));
     }
