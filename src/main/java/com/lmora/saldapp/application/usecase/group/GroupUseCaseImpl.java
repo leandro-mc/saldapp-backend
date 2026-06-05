@@ -72,6 +72,6 @@ public class GroupUseCaseImpl implements GroupUseCase {
         int integrantCount = integrantRepository.countByGroupId(group.getId());
         BigDecimal totalExpenses = expenseRepository.sumAmountByGroupId(group.getId());
 
-        return new GroupDetailsResult(group, integrantCount, totalExpenses);
+        return new GroupDetailsResult(group, integrantCount, totalExpenses != null ? totalExpenses : BigDecimal.ZERO);
     }
 }
