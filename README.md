@@ -57,7 +57,7 @@ http://localhost:8080/swagger-ui/index.html
 ## Estructura del proyecto
 
 ```
-src/main/kotlin/com/saldapp/
+src/main/java/com/saldapp/
 │
 ├── domain/
 │   ├── model/          # Entidades de dominio puras (sin @Entity)
