@@ -5,6 +5,7 @@ import com.lmora.saldapp.application.port.out.ExpenseRepositoryPort;
 import com.lmora.saldapp.application.port.out.GroupRepositoryPort;
 import com.lmora.saldapp.application.port.out.IntegrantRepositoryPort;
 import com.lmora.saldapp.application.usecase.financial.model.BalanceDetailsResult;
+import com.lmora.saldapp.application.usecase.financial.model.TransactionDetailsResult;
 import com.lmora.saldapp.domain.exception.IntegrantDontBelongToGroupException;
 import com.lmora.saldapp.domain.exception.ResourceNotFoundException;
 import com.lmora.saldapp.domain.model.*;
@@ -63,12 +64,23 @@ public class GroupFinancialUseCaseImp implements GroupFinancialUseCase {
     }
 
     @Override
-    public List<Transaction> getGroupTransactions(Long groupId) {
+    public List<TransactionDetailsResult> getGroupTransactions(Long groupId) {
         // Verify that the group exists
         Group existingGroup = groupRepository.findById(groupId)
                 .orElseThrow(() -> new ResourceNotFoundException("Group", groupId));
 
-        return SettlementCalculator.calculate(calculateGroupBalances(existingGroup.getId()));
+        List<Transaction> transactions = SettlementCalculator.calculate(calculateGroupBalances(existingGroup.getId()));
+
+        Map<Long, String> integrantNames = integrantRepository.findAllByGroup(existingGroup.getId()).stream()
+                .collect(Collectors.toMap(Integrant::getId, Integrant::getName));
+
+        return transactions.stream()
+                .map(transaction -> new TransactionDetailsResult(
+                        transaction,
+                        integrantNames.getOrDefault(transaction.getFromIntegrantId(), "Unknown"),
+                        integrantNames.getOrDefault(transaction.getToIntegrantId(), "Unknown")
+                ))
+                .toList();
     }
 
     private List<Balance> calculateGroupBalances(Long groupId) {
