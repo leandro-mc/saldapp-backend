@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 
 public record SettlementResponse(
         Long fromIntegrantId,
+        String fromIntegrantName,
         Long toIntegrantId,
+        String toIntegrantName,
         BigDecimal amount
 ) {
 }
