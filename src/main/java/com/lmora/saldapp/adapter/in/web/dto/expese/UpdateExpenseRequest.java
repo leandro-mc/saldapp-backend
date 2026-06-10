@@ -12,7 +12,7 @@ public record UpdateExpenseRequest(
         Long payedBy,
 
         @NotBlank(message = "Description is required")
-        @Size(min = 10, max = 500, message = "Description must be between 10 and 500 characters")
+        @Size(min = 4, max = 500, message = "Description must be between 4 and 500 characters")
         String description,
 
         @NotNull(message = "Amount is required")
