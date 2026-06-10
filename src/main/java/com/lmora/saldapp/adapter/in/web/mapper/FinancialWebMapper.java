@@ -4,7 +4,6 @@ import com.lmora.saldapp.adapter.in.web.dto.financial.BalanceResponse;
 import com.lmora.saldapp.adapter.in.web.dto.financial.SettlementResponse;
 import com.lmora.saldapp.application.usecase.financial.model.BalanceDetailsResult;
 import com.lmora.saldapp.application.usecase.financial.model.TransactionDetailsResult;
-import com.lmora.saldapp.domain.model.Transaction;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
