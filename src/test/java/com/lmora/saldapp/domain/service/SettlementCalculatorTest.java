@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class SettlementCalculatorTest {
 
     // Helpers
     private Balance balance(long id, String amount){
-        return new Balance(id, new BigDecimal(amount));
+        return new Balance(id, new BigDecimal(BigInteger.ZERO), new BigDecimal(amount));
     }
 
     // Inputs Validation
@@ -48,7 +49,7 @@ public class SettlementCalculatorTest {
         @Test
         @DisplayName("throws when balance field is null")
         void throwsWhenBalanceFieldIsNull() {
-            Balance invalid = new Balance(1L, null);
+            Balance invalid = new Balance(1L, null, null);
 
             assertThatIllegalArgumentException()
                     .isThrownBy(() -> SettlementCalculator.calculate(List.of(invalid)))
@@ -58,7 +59,7 @@ public class SettlementCalculatorTest {
         @Test
         @DisplayName("throws when integrantId is null")
         void throwsWhenIntegrantIdIsNull() {
-            Balance invalid = new Balance(null, new BigDecimal("100"));
+            Balance invalid = new Balance(null, new BigDecimal("100"), new BigDecimal("0"));
 
             assertThatIllegalArgumentException()
                     .isThrownBy(() -> SettlementCalculator.calculate(List.of(invalid)))
