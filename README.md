@@ -22,6 +22,7 @@ README also available in:
 ## Prerequisites
 
 - JDK 21+
+- Apache Maven 3.9.15+
 - Docker and Docker Compose
 
 ---
