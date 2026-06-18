@@ -1,97 +1,110 @@
 # SaldApp — Backend
 
-División inteligente de gastos grupales.
+Smart splitting of group expenses.
+
+README also available in:
+
+- [Spanish](README.es.md)
 
 ---
 
 ## Stack
 
-| Elemento | Elección            |
-|---|---------------------|
-| Lenguaje / Framework | Java + Spring Boot  |
-| Base de datos | PostgreSQL (Docker) |
-| Build | Maven               |
-| Arquitectura | Clean Architecture  |
+| Element               | Choice              |
+| --------------------- | ------------------- |
+| Language / Framework  | Java + Spring Boot  |
+| Database              | PostgreSQL (Docker) |
+| Build                 | Maven               |
+| Architecture          | Clean Architecture  |
 
 ---
 
-## Requisitos previos
+## Prerequisites
 
 - JDK 21+
-- Docker y Docker Compose
+- Docker and Docker Compose
 
 ---
 
-## Levantar el proyecto
+## Run the project
 
-**1. Clonar el repositorio**
+**1. Clone the repository**
+
 ```bash
 git clone https://github.com/leandro-mc/saldapp-backend.git
 cd saldapp-backend
 ```
 
-**2. Crear el archivo `.env`** a partir del ejemplo:
+**2. Create the `.env` file** from the example:
+
 ```bash
 cp .env.example .env
 ```
 
-**3. Levantar la base de datos**
+**3. Start the database**
+
 ```bash
 docker compose up -d
 ```
 
-**4. Correr la aplicación**
+**4. Run the application**
+
 ```bash
 mvn spring-boot:run
 ```
 
-La API queda disponible en `http://localhost:8080`.
-
-## API Documentation
-
-Once the app is running, Swagger UI is available at:
-http://localhost:8080/swagger-ui/index.html
+The API will be available at `http://localhost:8080`.
 
 ---
 
-## Estructura del proyecto
+## API Documentation
+
+Once the application is running, Swagger UI is available at:
+
+```
+http://localhost:8080/swagger-ui/index.html
+```
+
+---
+
+## Project structure
 
 ```
 src/main/java/com/saldapp/
 │
 ├── domain/
-│   ├── model/          # Entidades de dominio puras (sin @Entity)
-│   ├── exception/      # Excepciones de dominio
-│   └── service/        # Lógica de negocio compleja (algoritmo de settlement)
+│   ├── model/          # Pure domain entities (no @Entity)
+│   ├── exception/      # Domain exceptions
+│   └── service/        # Complex business logic (settlement algorithm)
 │
 ├── application/
 │   ├── port/
-│   │   ├── in/         # Interfaces de casos de uso (puertos de entrada)
-│   │   └── out/        # Interfaces de repositorios (puertos de salida)
-│   └── usecase/        # Implementación de los casos de uso
+│   │   ├── in/         # Use case interfaces (input ports)
+│   │   └── out/        # Repository interfaces (output ports)
+│   └── usecase/        # Use case implementations
 │
 ├── adapter/
 │   ├── in/
-│   │   └── web/        # Controllers REST
-│   │       ├── dto/    # Request y Response
+│   │   └── web/        # REST controllers
+│   │       ├── dto/    # Request and Response
 │   │       ├── mapper/
-│   │       └── exception/ # Manejo global de errores
+│   │       └── exception/ # Global error handling
 │   └── out/
 │       └── persistence/
-│           ├── entity/      # Entidades JPA
+│           ├── entity/     # JPA entities
 │           ├── mapper/
-│           ├── repository/  # Interfaces JPA
-│           └── adapter/     # Implementación de los puertos de salida
+│           ├── repository/ # JPA interfaces
+│           └── adapter/    # Output port implementations
 │
 └── infrastructure/
-    └── config/         # Configuración de Spring (beans, properties)
+    └── config/         # Spring configuration (beans, properties)
 ```
 
 ---
 
-## Variables de entorno
+## Environment variables
 
-Crear un `.env` en la raíz del proyecto basado en `.env.example`:
+Create a `.env` file in the project root based on `.env.example`:
 
 ```env
 SPRING_PROFILES_ACTIVE=dev
@@ -101,11 +114,15 @@ DB_PASSWORD=
 APP_PORT=8080
 ```
 
-## Autor
+---
 
-**Leandro Mora Corrales**
+## Author
+
+**Leandro Mora Corrales**  
 [linkedin.com/in/leandromora](https://linkedin.com/in/leandromora)
 
-## Licencia
+---
+
+## License
 
 MIT License — see [LICENSE](LICENSE) for details.
