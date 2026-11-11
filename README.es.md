@@ -1,118 +1,48 @@
 # SaldApp — Backend
 
-División inteligente de gastos grupales.
+> Read in English: [README.md](README.md)
 
-README también disponible en:
+API REST para dividir gastos grupales. Creas un grupo, agregas integrantes y gastos, y SaldApp calcula el balance de cada integrante y el **mínimo de pagos** necesarios para saldar todas las deudas. Frontend complementario: [saldapp-frontend](https://github.com/leandro-mc/saldapp-frontend).
 
-- [Inglés](README.md)
+## Funciones
 
----
+- Grupos, integrantes y gastos con CRUD completo
+- **Balances** por integrante y **plan de liquidación** (quién le paga a quién y cuánto)
+- **Cierre** de grupo, tras el cual queda en solo lectura
+- Respuestas de error consistentes mediante un manejador global de excepciones
+- Documentación interactiva con Swagger UI
 
-## Stack
+## Tecnologías
 
-| Elemento             | Elección            |
-|----------------------|---------------------|
-| Lenguaje / Framework | Java + Spring Boot  |
-| Base de datos        | PostgreSQL (Docker) |
-| Build                | Maven               |
-| Arquitectura         | Clean Architecture  |
+- Java 21, Spring Boot, Spring Data JPA
+- PostgreSQL (Docker Compose), Maven
+- Arquitectura limpia / hexagonal: dominio, casos de uso con puertos de entrada y salida, adaptadores web y de persistencia
+- Pruebas JUnit del algoritmo de liquidación
 
----
+## Cómo ejecutarlo
 
-## Requisitos previos
+Requisitos: JDK 21+, Maven y Docker.
 
-- JDK 21+
-- Apache Maven 3.9.15+
-- Docker y Docker Compose
-
----
-
-## Levantar el proyecto
-
-**1. Clonar el repositorio**
 ```bash
 git clone https://github.com/leandro-mc/saldapp-backend.git
 cd saldapp-backend
+cp .env.example .env        # configura las credenciales de la BD
+docker compose up -d        # PostgreSQL en el puerto 5435
+mvn spring-boot:run         # API en http://localhost:8080
 ```
 
-**2. Crear el archivo `.env`** a partir del ejemplo:
-```bash
-cp .env.example .env
-```
+Swagger UI: `http://localhost:8080/swagger-ui/index.html`
 
-**3. Levantar la base de datos**
-```bash
-docker compose up -d
-```
-
-**4. Correr la aplicación**
-```bash
-mvn spring-boot:run
-```
-
-La API queda disponible en `http://localhost:8080`.
-
-## API Documentation
-
-Con la aplicación corriendo, Swagger UI está disponible en:
-`
-http://localhost:8080/swagger-ui/index.html
-`
-
----
-
-## Estructura del proyecto
+## Estructura
 
 ```
-src/main/java/com/saldapp/
-│
-├── domain/
-│   ├── model/          # Entidades de dominio puras (sin @Entity)
-│   ├── exception/      # Excepciones de dominio
-│   └── service/        # Lógica de negocio compleja (algoritmo de settlement)
-│
-├── application/
-│   ├── port/
-│   │   ├── in/         # Interfaces de casos de uso (puertos de entrada)
-│   │   └── out/        # Interfaces de repositorios (puertos de salida)
-│   └── usecase/        # Implementación de los casos de uso
-│
-├── adapter/
-│   ├── in/
-│   │   └── web/        # Controllers REST
-│   │       ├── dto/    # Request y Response
-│   │       ├── mapper/
-│   │       └── exception/ # Manejo global de errores
-│   └── out/
-│       └── persistence/
-│           ├── entity/      # Entidades JPA
-│           ├── mapper/
-│           ├── repository/  # Interfaces JPA
-│           └── adapter/     # Implementación de los puertos de salida
-│
-└── infrastructure/
-    └── config/         # Configuración de Spring (beans, properties)
+src/main/java/com/lmora/saldapp/
+├── domain/        # Modelos puros, excepciones y SettlementCalculator
+├── application/   # Casos de uso y puertos (in / out)
+├── adapter/       # in/web (controllers, DTOs) y out/persistence (JPA)
+└── infraestructure/  # Configuración (CORS)
 ```
 
----
+## Destacado: algoritmo de liquidación
 
-## Variables de entorno
-
-Crear un `.env` en la raíz del proyecto basado en `.env.example`:
-
-```env
-SPRING_PROFILES_ACTIVE=dev
-DB_URL=jdbc:postgresql://localhost:5435/saldapp
-DB_USERNAME=
-DB_PASSWORD=
-APP_PORT=8080
-```
-
-## Autor
-
-**Leandro Mora Corrales**
-[linkedin.com/in/leandromora](https://linkedin.com/in/leandromora)
-
-## Licencia
-
-MIT License — see [LICENSE](LICENSE) for details.
+`SettlementCalculator` separa a los integrantes en deudores y acreedores con dos colas de prioridad y empareja repetidamente la mayor deuda con el mayor crédito. Así se mantiene bajo el número de transacciones, usando `BigDecimal` para manejar dinero con exactitud.

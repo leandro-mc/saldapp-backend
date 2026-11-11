@@ -1,129 +1,48 @@
 # SaldApp — Backend
 
-Smart splitting of group expenses.
+> Leer en español: [README.es.md](README.es.md)
 
-README also available in:
+REST API for splitting group expenses. Create a group, add members and expenses, and SaldApp computes each member's balance and the **minimum set of payments** needed to settle all debts. Companion frontend: [saldapp-frontend](https://github.com/leandro-mc/saldapp-frontend).
 
-- [Spanish](README.es.md)
+## Features
 
----
+- Groups, members (integrants) and expenses with full CRUD
+- Per-member **balances** and a **settlement plan** (who pays whom, and how much)
+- Group **closing**, after which it becomes read-only
+- Consistent error responses through a global exception handler
+- Interactive API docs with Swagger UI
 
-## Stack
+## Tech stack
 
-| Element               | Choice              |
-| --------------------- | ------------------- |
-| Language / Framework  | Java + Spring Boot  |
-| Database              | PostgreSQL (Docker) |
-| Build                 | Maven               |
-| Architecture          | Clean Architecture  |
+- Java 21, Spring Boot, Spring Data JPA
+- PostgreSQL (Docker Compose), Maven
+- Clean / hexagonal architecture: domain, use cases with input/output ports, web and persistence adapters
+- JUnit tests for the settlement algorithm
 
----
+## Getting started
 
-## Prerequisites
-
-- JDK 21+
-- Apache Maven 3.9.15+
-- Docker and Docker Compose
-
----
-
-## Run the project
-
-**1. Clone the repository**
+Requirements: JDK 21+, Maven and Docker.
 
 ```bash
 git clone https://github.com/leandro-mc/saldapp-backend.git
 cd saldapp-backend
+cp .env.example .env        # set DB credentials
+docker compose up -d        # PostgreSQL on port 5435
+mvn spring-boot:run         # API on http://localhost:8080
 ```
 
-**2. Create the `.env` file** from the example:
+Swagger UI: `http://localhost:8080/swagger-ui/index.html`
 
-```bash
-cp .env.example .env
-```
-
-**3. Start the database**
-
-```bash
-docker compose up -d
-```
-
-**4. Run the application**
-
-```bash
-mvn spring-boot:run
-```
-
-The API will be available at `http://localhost:8080`.
-
----
-
-## API Documentation
-
-Once the application is running, Swagger UI is available at:
+## Structure
 
 ```
-http://localhost:8080/swagger-ui/index.html
+src/main/java/com/lmora/saldapp/
+├── domain/        # Pure models, exceptions and SettlementCalculator
+├── application/   # Use cases and ports (in / out)
+├── adapter/       # in/web (controllers, DTOs) and out/persistence (JPA)
+└── infraestructure/  # Configuration (CORS)
 ```
 
----
+## Highlight: settlement algorithm
 
-## Project structure
-
-```
-src/main/java/com/saldapp/
-│
-├── domain/
-│   ├── model/          # Pure domain entities (no @Entity)
-│   ├── exception/      # Domain exceptions
-│   └── service/        # Complex business logic (settlement algorithm)
-│
-├── application/
-│   ├── port/
-│   │   ├── in/         # Use case interfaces (input ports)
-│   │   └── out/        # Repository interfaces (output ports)
-│   └── usecase/        # Use case implementations
-│
-├── adapter/
-│   ├── in/
-│   │   └── web/        # REST controllers
-│   │       ├── dto/    # Request and Response
-│   │       ├── mapper/
-│   │       └── exception/ # Global error handling
-│   └── out/
-│       └── persistence/
-│           ├── entity/     # JPA entities
-│           ├── mapper/
-│           ├── repository/ # JPA interfaces
-│           └── adapter/    # Output port implementations
-│
-└── infrastructure/
-    └── config/         # Spring configuration (beans, properties)
-```
-
----
-
-## Environment variables
-
-Create a `.env` file in the project root based on `.env.example`:
-
-```env
-SPRING_PROFILES_ACTIVE=dev
-DB_URL=jdbc:postgresql://localhost:5435/saldapp
-DB_USERNAME=
-DB_PASSWORD=
-APP_PORT=8080
-```
-
----
-
-## Author
-
-**Leandro Mora Corrales**  
-[linkedin.com/in/leandromora](https://linkedin.com/in/leandromora)
-
----
-
-## License
-
-MIT License — see [LICENSE](LICENSE) for details.
+`SettlementCalculator` splits members into debtors and creditors using two priority queues and repeatedly matches the largest debt with the largest credit. This keeps the number of transactions low, using `BigDecimal` for exact money handling.
