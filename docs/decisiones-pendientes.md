@@ -7,7 +7,7 @@
 | Tema | Resultado |
 |------|-----------|
 | Rama de control | `dev` (ya existía; se sincronizó con `main`). La rama por defecto sigue siendo `main`. |
-| Credenciales en código e historial | Revisados el árbol y las 94 commits de todas las ramas con gitleaks y un barrido propio. **No hay credenciales reales.** Solo existe un valor por defecto débil de contraseña de base de datos en `docker-compose.yml` (ver D-08). |
+| Credenciales en código e historial | Revisados el árbol y los 94 commits de todas las ramas con gitleaks y un barrido propio. **No hay credenciales reales.** Solo existe un valor por defecto débil de contraseña de base de datos en `docker-compose.yml` (ver D-08). |
 | Ramas existentes | `dev`, cinco ramas `feat/*` y `main`; todas las `feat/*` ya están fusionadas (ver D-10). |
 
 ## Resumen por capas
